@@ -31,4 +31,6 @@ if grep -E 'sa_family=AF_INET6?' /artifacts/gui-network.trace; then
     exit 1
 fi
 dpkg -r umumay
-cp /umumay_0.1.3_all.deb /artifacts/
+cp /umumay_0.1.3_all.deb /src/dist/umumay-0.1.3-source.tar.gz /artifacts/
+cd /artifacts
+sha256sum umumay_0.1.3_all.deb umumay-0.1.3-source.tar.gz > SHA256SUMS
