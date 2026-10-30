@@ -1,0 +1,12 @@
+{
+  "name": "Umumay · Pardus 25",
+  "build": {
+    "dockerfile": "../tools/Dockerfile.ci",
+    "context": "..",
+    "args": {"BASE": "pardus/yirmibes:latest"},
+    "options": ["--platform=linux/amd64"]
+  },
+  "runArgs": ["--platform=linux/amd64", "--network=none"],
+  "remoteUser": "root",
+  "postCreateCommand": "python3 -m unittest discover -s tests -v"
+}

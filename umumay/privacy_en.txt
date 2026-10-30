@@ -1,0 +1,81 @@
+UMUMAY — PRIVACY AND LOCAL PROCESSING NOTICE
+Preview 0.1.3 — 31 October 2026
+
+Umumay is an independent open-source project, not an official
+Pardus or TÜBİTAK/ULAKBİM product.
+
+You can use this open-source desktop application without an account,
+email address or identity details. It has no payments, subscriptions,
+advertising, analytics, telemetry, crash reporting, remote configuration
+or update checks. The application sends no internet requests at runtime.
+It uses only the local display and Unix session D-Bus connections;
+TCP display and D-Bus addresses are rejected.
+The notification-area icon and menu also use local desktop services.
+
+INFORMATION PROCESSED LOCALLY
+Depending on the tool you choose, current CPU/memory/disk figures, uptime,
+recognised distribution family and desktop/session type are processed in
+memory. The Packages screen reads package names/versions from the local
+dpkg database. The Link tool parses only the HTTP/HTTPS text you enter;
+it does not visit the address, resolve DNS or monitor your clipboard.
+A link you enter may contain personal information; avoid unnecessary
+sensitive input. Keep Awake sends a timed request to the local session
+manager or power manager.
+
+PURPOSE, STORAGE AND ACCESS
+This information is used only to run your selected tool and show its
+result. It is not sent to the developer or third parties. The application
+does not persist CPU/memory history, package inventories, URLs, names,
+email addresses, IP/MAC addresses, device identifiers, passwords, process
+lists or usage logs. In-memory information is released on exit; this is
+not a guarantee of secure erasure from operating-system memory or swap.
+The only automatically saved file contains disabled built-in module IDs:
+$XDG_CONFIG_HOME/umumay/settings.json or
+~/.config/umumay/settings.json, written with 0600 permissions.
+Preferences remain until you delete the file; the next launch then uses
+defaults. Uninstalling the application does not delete user preferences.
+
+OPTIONAL LOCAL REPORT
+A report is written only when you choose Save and select a destination.
+Its schema is limited to application version, distribution family,
+restricted session categories and numeric resource figures. It excludes
+names, emails, hostname, IP/MAC, serial numbers, home directory, package
+inventory, URLs and clipboard content. Reports are never uploaded and
+remain at the selected location until you delete them. Do not choose a
+network drive or cloud-synchronised folder. Later sharing by you, or
+synchronisation by your operating system or backup software, is outside
+this application's transmission behaviour and cannot be controlled by it.
+
+OPTIONAL DESKTOP SHORTCUT
+An explicit action in Modules writes a fixed Umumay.desktop launcher
+to the directory you select. It contains no personal input. Existing
+files and symlinks are not replaced; permissions are 0700. It remains
+until you delete it. Avoid network drives and cloud-synchronised folders.
+
+TRANSFERS AND THIRD PARTIES
+The installed application has no data recipient, server, domestic or
+international transfer, cookies, tracking SDKs or remote fonts, images
+or scripts. Features that require networking are excluded. Downloading
+source or a package from GitHub or a distribution repository is separate
+from runtime operation; that service may process your connection details.
+The application opens no support form and uploads no GitHub reports.
+
+RIGHTS AND LEGAL SCOPE
+This notice does not request consent to data processing or marketing.
+The developer maintains no account or database for your local inputs.
+You can disable modules, delete local preferences and reports, and
+inspect or modify the source code. If a data-processing service or
+organisation is added, or this software becomes part of an organisation's
+processing activities, controller identity, contact address, method/legal
+basis, purposes, recipients and Article 11 rights under Turkish Law
+No. 6698 must be determined for that actual activity. Those rights broadly
+include learning whether data is processed, obtaining information,
+learning purposes and recipients, requesting correction/deletion or
+destruction and notification to recipients, objecting to automated
+analysis and seeking compensation for damage. Local-only operation does
+not automatically exempt every activity from legal obligations.
+Source and packages are distributed through the sendagburak/umumay
+repository on GitHub; the application sends it no data. This technical
+preview notice does not claim to complete all Article 10 requirements
+for every distributor or organisational deployment. Where an actual
+processing activity exists, its controller must be identified separately.

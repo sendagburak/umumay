@@ -1,0 +1,17 @@
+Source: umumay
+Section: utils
+Priority: optional
+Maintainer: Umumay contributors <76114944+sendagburak@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 13), dh-python, python3-all, python3-setuptools
+Standards-Version: 4.5.1
+Rules-Requires-Root: no
+
+Package: umumay
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, python3 (>= 3.9), python3-gi, gir1.2-gtk-3.0
+Recommends: at-spi2-core, gir1.2-ayatanaappindicator3-0.1
+Homepage: https://github.com/sendagburak/umumay
+Description: Umumay offline modular desktop utilities (preview)
+ Native GTK 3 system metrics, installed-package search, timed idle inhibition
+ and manually entered URL cleanup. No accounts, telemetry or network clients.
+ This is an independent preview, not an official distribution product.

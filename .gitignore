@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pybuild/
+build/
+dist/
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/*.substvars
+debian/umumay/
+*.deb
+*.changes
+*.buildinfo
+*.tar.*
+.venv/

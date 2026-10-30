@@ -1,0 +1,40 @@
+name: Offline Linux compatibility
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {image: 'debian:bullseye', id: debian, family: '11', name: debian11}
+          - {image: 'debian:bookworm', id: debian, family: '12', name: debian12}
+          - {image: 'debian:trixie', id: debian, family: '13', name: debian13}
+          - {image: 'pardus/yirmibir:latest', id: pardus, family: '21', name: pardus21}
+          - {image: 'pardus/yirmiuc:latest', id: pardus, family: '23', name: pardus23}
+          - {image: 'pardus/yirmibes:latest', id: pardus, family: '25', name: pardus25}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-10-30
+      - name: Build test environment (dependency downloads only here)
+        run: docker build --build-arg BASE='${{ matrix.image }}' -f tools/Dockerfile.ci -t local-tools-test .
+      - name: Tests, Debian build and installed GTK without networking
+        run: |
+          mkdir -p dist
+          docker run --rm --network none -v "$PWD/dist:/artifacts" local-tools-test \
+            env UMUMAY_SCREENSHOT_DIR=/artifacts/screenshots sh tools/ci-linux.sh '${{ matrix.id }}' '${{ matrix.family }}'
+      - name: Prepare real desktop service tests (Pardus)
+        if: matrix.id == 'pardus'
+        run: docker build --build-arg BASE=local-tools-test -f tools/Dockerfile.sessions -t local-session-test .
+      - name: Real XFCE and GNOME idle APIs without networking
+        if: matrix.id == 'pardus'
+        run: |
+          docker run --rm --network none local-session-test sh tools/ci-sessions.sh xfce
+          docker run --rm --network none local-session-test sh tools/ci-sessions.sh gnome
+      - name: Synthetic test artifacts only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, verified 2026-10-30
+        with:
+          name: preview-${{ matrix.name }}
+          path: dist/

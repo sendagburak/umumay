@@ -1,0 +1,5 @@
+umumay/io.github.sendagburak.umumay.desktop usr/share/applications
+data/icons/* usr/share/icons/hicolor
+docs usr/share/doc/umumay
+replica usr/share/doc/umumay
+umumay/privacy_*.txt usr/share/doc/umumay/umumay

@@ -1,0 +1,30 @@
+umumay (0.1.3) unstable; urgency=medium
+
+  * Bundle the original bird logo and standard-size application icons.
+  * Use io.github.sendagburak.umumay desktop identity and window branding.
+  * Add local AppIndicator/X11 tray integration and explicit desktop shortcuts.
+  * Prepare the first bilingual public source and preview release.
+
+ -- Umumay contributors <76114944+sendagburak@users.noreply.github.com>  Sat, 31 Oct 2026 02:00:00 +0300
+
+umumay (0.1.2) unstable; urgency=medium
+
+  * Rename the independent preview to Umumay at the user's request.
+  * Rename the command, Python package, application ID and local settings path.
+  * Preserve 0.1.1 test evidence without claiming renamed GTK was retested.
+
+ -- Local Preview Builder <builder@localhost>  Sat, 31 Oct 2026 01:00:00 +0300
+
+pardus-centik (0.1.1) unstable; urgency=medium
+
+  * Verify Debian packaging and GTK on Pardus 21.5, 23.5 and 25.2.
+  * Add XFCE PowerManagement inhibition for Pardus 21/23.
+  * Add offline Dev Containers, screenshot and real session API checks.
+
+ -- Local Preview Builder <builder@localhost>  Fri, 30 Oct 2026 21:00:00 +0300
+
+pardus-centik (0.1.0) unstable; urgency=medium
+
+  * Initial independent offline preview, named Pardus Centik; publisher pending.
+
+ -- Local Preview Builder <builder@localhost>  Fri, 30 Oct 2026 21:00:00 +0300

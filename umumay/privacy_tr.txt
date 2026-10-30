@@ -1,0 +1,78 @@
+UMUMAY — GİZLİLİK VE YEREL VERİ İŞLEME HAKKINDA BİLGİLENDİRME
+Önizleme 0.1.3 — 31 Ekim 2026
+
+Umumay bağımsız bir açık kaynak projedir; resmî Pardus veya
+TÜBİTAK/ULAKBİM ürünü değildir.
+
+Bu açık kaynak masaüstü uygulamasını hesap açmadan, e-posta veya kimlik
+bilgisi vermeden kullanabilirsiniz. Uygulamada ödeme, abonelik, reklam,
+analitik, telemetri, hata raporu gönderimi, uzaktan yapılandırma veya
+güncelleme sorgusu bulunmaz. Çalışma sırasında uygulama tarafından
+internete istek gönderilmez. Yalnız yerel ekran ve Unix oturum D-Bus
+bağlantıları kullanılır; TCP ekran/D-Bus adresleri reddedilir.
+Bildirim alanı simgesi ve menüsü de yerel masaüstü hizmetleriyle çalışır.
+
+HANGİ BİLGİLER YERELDE İŞLENİR?
+Seçtiğiniz araca göre anlık CPU/bellek/disk kullanım sayıları, çalışma
+süresi, tanınan dağıtım ailesi ve masaüstü/oturum türü bellekte işlenir.
+Paketler ekranı yerel dpkg veritabanındaki paket adı/sürümünü okur.
+Bağlantı aracı yalnız sizin elle girdiğiniz HTTP/HTTPS metnini ayrıştırır;
+adresi ziyaret etmez, DNS sorgusu yapmaz ve panoyu izlemez. Girilen
+bağlantı kişisel bilgi içerebilir; gereksiz hassas içerik yapıştırmayın.
+Uyanık tutma, yerel oturum/güç yöneticisine süreli bir istek iletir.
+
+SAKLAMA, AMAÇ VE ERİŞİM
+Bu bilgiler yalnız seçtiğiniz aracı çalıştırmak ve sonucu size göstermek
+için kullanılır; geliştiriciye veya üçüncü kişiye gönderilmez. CPU/bellek
+geçmişi, paket listesi, URL, kullanıcı adı, e-posta, IP/MAC, cihaz kimliği,
+parola, süreç listesi veya kullanım günlüğü uygulama tarafından kalıcı
+olarak tutulmaz. Bellekteki bilgiler uygulama kapanınca bırakılır; bu,
+işletim sistemi belleği/swap üzerinde güvenli silme garantisi değildir.
+Otomatik kaydedilen tek dosya kapattığınız sabit modül kimlikleridir:
+$XDG_CONFIG_HOME/umumay/settings.json veya
+~/.config/umumay/settings.json. Dosya 0600 izinle yazılır.
+Bu tercihler dosyayı silene kadar kalır; tekrar başlatmada varsayılanlar
+kullanılır. Uygulamayı kaldırmak kullanıcı tercih dosyasını silmez.
+
+İSTEĞE BAĞLI YEREL RAPOR
+Raporu yalnız siz Kaydet eylemiyle seçtiğiniz dosyaya yazabilirsiniz.
+Rapor şeması uygulama sürümü, dağıtım ailesi, sınırlı oturum türü ve
+sayısal kaynak değerleriyle sınırlıdır. Ad, e-posta, hostname, IP/MAC,
+seri numarası, ev dizini, paket listesi, URL ve pano içeriği eklenmez.
+Rapor otomatik gönderilmez; silene kadar seçtiğiniz yerde kalır.
+Ağ diski veya bulutla eşitlenen klasör seçmeyin. Raporu daha sonra
+paylaşmanız ya da işletim sistemi/yedekleme aracınızın eşitlemesi bu
+uygulamanın veri iletimi değildir ve uygulama tarafından denetlenemez.
+
+İSTEĞE BAĞLI MASAÜSTÜ KISAYOLU
+Modüller ekranından açıkça istediğinizde seçtiğiniz dizine sabit bir
+Umumay.desktop başlatıcısı yazılır. Kişisel girdi içermez. Mevcut dosya
+veya sembolik bağlantıların üzerine yazılmaz; izinleri 0700'dür.
+Silene kadar seçtiğiniz yerde kalır. Bu konumda da ağ/bulut klasörü seçmeyin.
+
+AKTARIM VE ÜÇÜNCÜ TARAFLAR
+Kurulu uygulamada veri alıcısı, sunucu, yurt içi/yurt dışı aktarım,
+çerez, takip SDK'sı veya haricî font/görsel/betik kaynağı yoktur. Ağ
+gerektiren özellikler bu sürüme alınmamıştır. Açık kaynak kodu/paketi
+GitHub veya bir dağıtım deposundan indirmeniz, bu uygulamanın çalışma
+akışının dışındadır; indirdiğiniz hizmet kendi bağlantı bilgilerinizi
+işleyebilir. Uygulama destek formu açmaz ve GitHub'a rapor yüklemez.
+
+HAKLAR VE HUKUKİ SINIR
+Bu metin bir açık rıza veya pazarlama onayı talebi değildir. Yerel
+girdileriniz için geliştirici tarafında bir hesap veya veri tabanı
+oluşturulmaz. Modülleri kapatabilir; yerel tercih ve rapor dosyalarınızı
+silebilir; açık kaynak kodunu inceleyip değiştirebilirsiniz.
+Kişisel veri işleyen bir hizmet/kurum eklenecek veya bu yazılım kurumsal
+bir veri işleme faaliyetine dahil edilecekse veri sorumlusu kimliği,
+başvuru adresi, yöntem/hukuki sebep, amaçlar, alıcılar ve KVKK m.11
+hakları gerçek faaliyete göre ayrıca belirlenmelidir. KVKK m.11 genel
+olarak işlenip işlenmediğini öğrenme, bilgi isteme, amaç ve alıcıları
+öğrenme, düzeltme/silme/yok etme, bunların alıcılara bildirilmesini
+isteme, otomatik analiz sonucuna itiraz ve zararın giderilmesini kapsar.
+Yalnız bilgisayarda çalışmak kendiliğinden bütün hukuki yükümlülüklerden
+muafiyet sağlamaz. Kaynak ve paket yayın kanalı GitHub'daki
+sendagburak/umumay deposudur; uygulama bu kanala veri göndermez.
+Bu teknik önizleme bildirimi, her dağıtım veya kurumsal kullanımın
+tüm KVKK m.10 şartlarını tamamladığı iddiasını taşımaz. Gerçek veri
+işleme faaliyeti varsa ilgili veri sorumlusu ayrıca belirlenmelidir.

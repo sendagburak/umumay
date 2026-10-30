@@ -1,0 +1,11 @@
+ARG BASE=umumay-test:25
+FROM ${BASE}
+RUN apt-get update -o APT::Update::Error-Mode=any && \
+    if apt-cache show xfce4-screensaver 2>/dev/null | grep -q '^Version:'; then \
+      manager=xfce4-screensaver; else manager=xfce4-power-manager; fi && \
+    apt-get install -y --no-install-recommends "$manager" upower gnome-session-bin xfwm4 libglib2.0-bin && \
+    rm -rf /var/lib/apt/lists/*
+RUN useradd --create-home --uid 1000 umumaytest && \
+    mkdir -p /usr/share/gnome-session/sessions && \
+    printf '[GNOME Session]\nName=Umumay API test\nRequiredComponents=\n' > /usr/share/gnome-session/sessions/umumay-test.session
+COPY tools/session_check.py tools/session-test.sh tools/ci-sessions.sh /src/tools/

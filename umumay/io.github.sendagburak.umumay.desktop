@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+[Desktop Entry]
+Type=Application
+Name=Umumay
+Comment=Offline desktop utilities: metrics, packages, keep awake and link cleanup
+Comment[tr]=Yerel masaüstü araçları: sistem, paketler, uyanık tutma ve bağlantı temizleme
+Exec=umumay
+Icon=umumay
+StartupWMClass=io.github.sendagburak.umumay
+Terminal=false
+Categories=System;GTK;
+Keywords=system;offline;packages;
+Keywords[tr]=sistem;yerel;paketler;
+StartupNotify=true

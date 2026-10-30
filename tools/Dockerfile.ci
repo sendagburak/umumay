@@ -1,0 +1,19 @@
+ARG BASE=debian:bullseye
+FROM debian:trixie-slim AS trust
+RUN apt-get update -o APT::Update::Error-Mode=any && \
+    apt-get install -y --no-install-recommends ca-certificates
+FROM ${BASE}
+COPY --from=trust /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -o APT::Update::Error-Mode=any \
+    -o Acquire::https::CaInfo=/etc/ssl/certs/ca-certificates.crt && \
+    apt-get install -y -o Acquire::https::CaInfo=/etc/ssl/certs/ca-certificates.crt --no-install-recommends \
+    ca-certificates \
+    python3-all python3-setuptools python3-gi gir1.2-gtk-3.0 \
+    debhelper dh-python dpkg-dev make fakeroot dbus-x11 xvfb xauth \
+    strace desktop-file-utils && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -o APT::Update::Error-Mode=any && \
+    apt-get install -y --no-install-recommends librsvg2-common at-spi2-core scrot gir1.2-ayatanaappindicator3-0.1 && \
+    rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY . .

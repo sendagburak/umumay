@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Test · Python çekirdek",
+      "type": "process",
+      "command": "python3",
+      "args": ["-m", "unittest", "discover", "-s", "tests", "-v"],
+      "group": {"kind": "test", "isDefault": true},
+      "problemMatcher": []
+    },
+    {
+      "label": "Test · Linux GTK (Dev Container)",
+      "type": "process",
+      "command": "dbus-run-session",
+      "args": ["--", "xvfb-run", "-a", "python3", "-m", "unittest", "discover", "-s", "tests", "-v"],
+      "options": {"env": {"RUN_GTK_TESTS": "1"}},
+      "problemMatcher": []
+    }
+  ]
+}
