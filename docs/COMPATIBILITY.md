@@ -1,8 +1,15 @@
-# Uyumluluk — 0.1.1 kanıtı ve Umumay 0.1.2 hedefi
+# Uyumluluk — Umumay 0.1.3 ve tarihî 0.1.1 kanıtı
 
-31 Ekim 2026: Aşağıdaki başarılı Linux gözlemleri önceki adla hazırlanmış
-**0.1.1** sürümüne aittir. Umumay 0.1.2 için Linux paket/GTK doğrulaması
-henüz tekrarlanmadı; hedef aileler değişmedi. Ayrıntı: docs/VALIDATION.md.
+31 Ekim 2026: Umumay **0.1.3**, Pardus 21/23/25 ve Debian 11/12/13
+kullanıcı alanlarındaki altı GitHub CI görevini başarıyla tamamladı.
+[Doğrulanmış koşu ve paket commit'i](https://github.com/sendagburak/umumay/actions/runs/41141196995).
+Her aile kendi native paketini üretip kurdu, GTK/Xvfb akışını çalıştırdı
+ve paketi kaldırdı. Pardus görevleri gerçek GNOME/XFCE idle API'lerini de
+sınadı. Yayımlanan .deb, bu koşunun Pardus 25.2 çıktısıdır; eşleşen tam
+kaynak aynı sürümde sunulur. Tam ISO/Wayland/donanım sınırları aşağıda kalır.
+
+Aşağıdaki eski yerel test sütunu yalnız **0.1.1** kanıtıdır ve yeni
+sürümün sonucuyla birleştirilmez. Ayrıntı: [güncel doğrulama](VALIDATION.md).
 
 | Pardus ailesi | Debian tabanı | Beklenen Python | GTK ortak taban | 0.1.1 yerel test |
 | --- | --- | --- | --- | --- |
@@ -30,13 +37,14 @@ resmî hesabındaki pardus/yirmibir,yirmiuc,yirmibes. İmaj içinde ID ve
 VERSION_ID beklenen aileyle eşleşmelidir. EOL imaj veya depo erişimi
 bozulursa test başarısız olmalı; Debian testi Pardus testi diye sunulmamalı.
 
-Bu oturumda çalışanlar üç gerçek Pardus OCI kullanıcı alanıdır; Linux
+Tarihî 0.1.1 yerel oturumunda çalışanlar üç gerçek Pardus OCI kullanıcı alanıdır; Linux
 çekirdeği Lima/Debian ARM64 VM'sine aittir ve amd64 süreçler Rosetta ile
 çalışmıştır. GTK, Xvfb/X11'de sınandı. Uyanık tutma testleri UID1000 ile
 gerçek GNOME SessionManager ve XFCE servislerini ayrı özel D-Bus üzerinde
 kullandı. Bu, tam GNOME Shell/XFCE ISO kurulumu veya Wayland testi değildir.
 21/23'te eski XFCE PowerManager API'si, 25'te XFCE ScreenSaver API'si
-doğrulandı. Altı Debian/Pardus GitHub işi tanımlı; GitHub'a yüklenmedi.
+doğrulandı. O yerel kayıt sırasında GitHub işleri henüz çalıştırılmamıştı.
+Güncel 0.1.3 GitHub sonuçları üstte ayrı verilmiştir.
 
 ## Gerçek VM yayın kapısı (tamamı bekliyor)
 

@@ -8,8 +8,17 @@ ve `io.github.sendagburak.umumay` kimliğini ekler.
 | Python 3.9 çekirdek, CLI, veri sınırı, özel izinler, ağsız çekirdek | Yerelde 32 geçti; 1 Linux GTK testi atlandı |
 | Logo ve tüm boyutların .deb içinde olması, masaüstü kimliği | Paket üreten bütünleşme testi geçti |
 | Kısayolun 0700 olması, mevcut dosya ve symlink'i ezmemesi | Yerel gerçek dosya testi geçti |
-| Güncel Debian/Pardus Linux build/kur/kaldır/GTK ve ağ izi | GitHub Actions sonucu ile ayrıca doğrulanır |
+| Güncel Debian/Pardus Linux build/kur/kaldır/GTK ve ağ izi | Altı görev başarılı; run41141196995, commit e1ed7ce |
 | Gerçek tam ISO/GNOME Shell/Wayland/fiziksel donanım | Test edilmedi / Not tested |
+
+[0.1.3 CI kaydı](https://github.com/sendagburak/umumay/actions/runs/41141196995)
+Pardus 21/23/25 ve Debian 11/12/13 için başarılıdır. Her ailede 32 çekirdek
+testi ve ayrıca kurulu uygulamaya karşı gerçek GTK testi geçti. Pardus
+görevleri GNOME/XFCE hizmet API'lerini de çalıştırdı. Yayımlanan native .deb
+Pardus 25.2 görevinin çıktısıdır; her ailede aynı ikili dosyanın çapraz
+kurulduğu iddia edilmez. Yakalanan GTK ağ izinde IP işlemi görülmedi.
+Sürüm etiketi ve eşleşen kaynak e1ed7ce commit'inde sabittir. Bu sayfanın
+yayın sonrası belge güncellemesi release paketini değiştirmez.
 
 CI'nin her sürümdeki gerçek sonucu GitHub Actions kaydında görülür.
 Başarısız veya çalışmamış görev başarılı sayılmaz. macOS'taki GTK atlaması
