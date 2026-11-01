@@ -8,8 +8,11 @@ import tarfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.1.3'
+VERSION = '0.1.4'
 EPOCH = 1793394000
+SOURCE_ROOTS = {'umumay', 'data', 'debian', 'docs', 'tests', 'tools', '.github',
+                '.devcontainer', '.vscode', 'setup.py', 'LICENSE', 'README.md',
+                'README.en.md', 'CONTRIBUTING.md', 'SECURITY.md', '.gitignore', '.dockerignore'}
 
 
 def tar_bytes(files):
@@ -30,7 +33,8 @@ def build():
     launcher = b'#!/usr/bin/python3\nfrom umumay.__main__ import main\nraise SystemExit(main())\n'
     files = [('usr/bin/umumay', launcher, 0o755)]
     for path in sorted((ROOT / 'umumay').iterdir()):
-        if path.suffix in {'.py', '.txt', '.png', '.desktop'}:
+        if path.suffix == '.py' or path.name in {'privacy_tr.txt', 'privacy_en.txt',
+                                               'umumay.png', 'io.github.sendagburak.umumay.desktop'}:
             files.append(('usr/lib/python3/dist-packages/umumay/' + path.name, path.read_bytes(), 0o644))
     for source, target in [
         ('umumay/io.github.sendagburak.umumay.desktop', 'usr/share/applications/io.github.sendagburak.umumay.desktop'),
@@ -45,10 +49,9 @@ def build():
     for path in sorted((ROOT / 'data/icons').rglob('*.png')):
         files.append(('usr/share/icons/hicolor/' + path.relative_to(ROOT / 'data/icons').as_posix(),
                       path.read_bytes(), 0o644))
-    for folder in ['docs', 'replica']:
-        for path in sorted((ROOT / folder).rglob('*')):
-            if path.is_file():
-                files.append(('usr/share/doc/umumay/' + path.relative_to(ROOT).as_posix(), path.read_bytes(), 0o644))
+    for path in sorted((ROOT / 'docs').rglob('*')):
+        if path.is_file():
+            files.append(('usr/share/doc/umumay/' + path.relative_to(ROOT).as_posix(), path.read_bytes(), 0o644))
     for path in sorted((ROOT / 'umumay').glob('privacy_*.txt')):
         files.append(('usr/share/doc/umumay/umumay/' + path.name, path.read_bytes(), 0o644))
     control = ('Package: umumay\nVersion: %s\nArchitecture: all\nSection: utils\n'
@@ -71,7 +74,15 @@ def build():
     source_files = []
     for path in sorted(ROOT.rglob('*')):
         relative = path.relative_to(ROOT)
-        if not path.is_file() or any(p in {'dist', '__pycache__', '.git', '.pybuild', 'build'} for p in relative.parts) or path.suffix in {'.pyc', '.deb'}:
+        if not path.is_file() or relative.parts[0] not in SOURCE_ROOTS:
+            continue
+        if any(p in {'dist', '__pycache__', '.git', '.pybuild', 'build', '.debhelper'}
+               or p.endswith('.egg-info') for p in relative.parts):
+            continue
+        if (relative.parts[:2] == ('debian', 'umumay') or
+                any(p.startswith('.env') for p in relative.parts) or
+                path.name in {'SKILL.md', 'api_keys.txt', 'credentials.json', 'secrets.json'} or
+                path.suffix in {'.pyc', '.deb', '.key', '.pem'}):
             continue
         source_files.append(('umumay-' + VERSION + '/' + relative.as_posix(), path.read_bytes(),
                              0o755 if relative.as_posix() in {'debian/rules', 'tools/build_preview.py'} else 0o644))

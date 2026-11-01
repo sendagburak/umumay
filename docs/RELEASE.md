@@ -2,7 +2,8 @@
 
 Kaynak deposu: https://github.com/sendagburak/umumay
 
-İlk yayın 0.1.3 geliştirme önizlemesidir. GitHub sürümü **pre-release**
+İlk yayın 0.1.3'tür. 0.1.4, geliştirme notlarını dağıtımdan çıkaran düzeltmedir.
+GitHub sürümü **pre-release**
 olarak işaretlenir. Türkçe README, İngilizce README.en.md, GPL tam metni,
 iki dilde gizlilik bildirimi, logo ve paketleme kaynakta birlikte tutulur.
 Yayımlanan ikiliyle tam karşılık gelen kaynak arşivi ve SHA256 sağlanır.

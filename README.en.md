@@ -13,7 +13,7 @@ connection is required.
 · [Privacy](docs/PRIVACY.md) · [GPL-3.0-or-later](LICENSE)
 
 Umumay is an independent open-source project, not an official Pardus or
-TÜBİTAK/ULAKBİM product. **0.1.3 is a development preview.** It targets
+TÜBİTAK/ULAKBİM product. **0.1.4 is a development preview.** It targets
 Pardus 25, 23 and 21 with Python 3.9+ and GTK 3.24. Pardus 21 is outside
 distribution support; application compatibility does not extend OS security support.
 
@@ -45,7 +45,7 @@ Download the matching `.deb`, source archive and `SHA256SUMS` from
 
 ```sh
 sha256sum -c SHA256SUMS
-sudo apt install ./umumay_0.1.3_all.deb
+sudo apt install ./umumay_0.1.4_all.deb
 umumay
 ```
 
@@ -91,7 +91,7 @@ GNOME Shell, Wayland or physical hardware validation.
 [Validation scope](docs/VALIDATION.md) distinguishes current results from historical tests.
 
 [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) ·
-[Architecture](replica/architecture.md) · [Brand assets](docs/BRANDING.md)
+[Architecture](docs/ARCHITECTURE.md) · [Brand assets](docs/BRANDING.md)
 
 The original name is inspired by the Hüma bird, without claiming to be
 a historical variant. No Vorssaint code, logo or design was copied.

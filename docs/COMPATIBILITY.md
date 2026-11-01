@@ -1,4 +1,8 @@
-# Uyumluluk — Umumay 0.1.3 ve tarihî 0.1.1 kanıtı
+# Uyumluluk — güncel hedef ve tarihî test kanıtları
+
+0.1.4 bir paketleme düzeltmesidir; hedef aileler değişmedi. Güncel sürümün
+sonucu [GitHub Actions](https://github.com/sendagburak/umumay/actions)
+kaydından, tarihî 0.1.3 sonucu aşağıdaki sabit koşudan izlenir.
 
 31 Ekim 2026: Umumay **0.1.3**, Pardus 21/23/25 ve Debian 11/12/13
 kullanıcı alanlarındaki altı GitHub CI görevini başarıyla tamamladı.

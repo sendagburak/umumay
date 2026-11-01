@@ -14,3 +14,18 @@ debian/umumay/
 *.buildinfo
 *.tar.*
 .venv/
+
+# Local development tools and credentials do not belong to the project.
+/replica/
+/work/
+/.agents/
+/.codex/
+/.claude/
+SKILL.md
+.env
+.env.*
+api_keys.txt
+credentials.json
+secrets.json
+*.key
+*.pem

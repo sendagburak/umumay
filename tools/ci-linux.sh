@@ -17,9 +17,14 @@ PY
 desktop-file-validate umumay/io.github.sendagburak.umumay.desktop
 python3 -m unittest discover -s tests -v
 python3 tools/build_preview.py
-dpkg-deb --info dist/umumay_0.1.3_all.deb
+dpkg-deb --info dist/umumay_0.1.4_all.deb
 dpkg-buildpackage -us -uc -b
-dpkg -i ../umumay_0.1.3_all.deb
+dpkg-deb --contents ../umumay_0.1.4_all.deb > /artifacts/package-contents.txt
+if grep -E '/(replica|\.agents|\.codex|\.claude)/|/(SKILL\.md|\.env|api_keys\.txt)$' /artifacts/package-contents.txt; then
+    echo 'Unexpected development or credential file in binary package' >&2
+    exit 1
+fi
+dpkg -i ../umumay_0.1.4_all.deb
 cd /tmp
 /usr/bin/umumay --version
 /usr/bin/umumay --report /tmp/report.json
@@ -31,6 +36,6 @@ if grep -E 'sa_family=AF_INET6?' /artifacts/gui-network.trace; then
     exit 1
 fi
 dpkg -r umumay
-cp /umumay_0.1.3_all.deb /src/dist/umumay-0.1.3-source.tar.gz /artifacts/
+cp /umumay_0.1.4_all.deb /src/dist/umumay-0.1.4-source.tar.gz /artifacts/
 cd /artifacts
-sha256sum umumay_0.1.3_all.deb umumay-0.1.3-source.tar.gz > SHA256SUMS
+sha256sum umumay_0.1.4_all.deb umumay-0.1.4-source.tar.gz > SHA256SUMS

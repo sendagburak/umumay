@@ -1,4 +1,16 @@
-# Umumay 0.1.3 — doğrulama kapsamı / Validation scope
+# Umumay — doğrulama kapsamı / Validation scope
+
+## 0.1.4 paketleme düzeltmesi — 1 Kasım 2026
+
+Geliştirme notları public kaynak ve ikili paketten çıkarıldı. Kaynak arşivi
+tanımlanmış proje kökleriyle sınırlandı. Bir test, örnek ajan dosyası ve
+kimlik bilgisi dosyalarını geçici kopyaya ekleyip paket/kaynak dışında
+kaldığını doğrular. Örnekler gerçek anahtar içermez. Yerel koşu: 32 geçti,
+1 Linux GTK testi atlandı. Bu sürümün native Linux sonuçları
+[GitHub Actions](https://github.com/sendagburak/umumay/actions) kaydındadır.
+Uygulamanın araçları ve yerel çalışma davranışı değiştirilmedi.
+
+## Tarihî 0.1.3 doğrulaması
 
 31 Ekim / October 2026. Bu sürüm logo, bildirim alanı, masaüstü kısayolu
 ve `io.github.sendagburak.umumay` kimliğini ekler.

@@ -1,3 +1,12 @@
+umumay (0.1.4) unstable; urgency=medium
+
+  * Remove development workflow notes from the public project and binary package.
+  * Keep product architecture documentation under docs.
+  * Restrict source archive inputs and reject local agent/credential fixtures.
+  * Preserve runtime behaviour, logo and offline operation.
+
+ -- Umumay contributors <76114944+sendagburak@users.noreply.github.com>  Sun, 01 Nov 2026 00:00:00 +0300
+
 umumay (0.1.3) unstable; urgency=medium
 
   * Bundle the original bird logo and standard-size application icons.

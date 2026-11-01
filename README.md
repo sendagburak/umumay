@@ -13,7 +13,7 @@ bağlanmana gerek yok.
 · [Gizlilik](docs/PRIVACY.md) · [GPL-3.0-or-later](LICENSE)
 
 Umumay bağımsız bir açık kaynak projedir. Resmî Pardus veya TÜBİTAK/ULAKBİM
-ürünü değildir. **0.1.3 geliştirme önizlemesidir.** Python 3.9+ ve GTK 3.24
+ürünü değildir. **0.1.4 geliştirme önizlemesidir.** Python 3.9+ ve GTK 3.24
 ile Pardus 25, 23 ve 21 ailelerini hedefler. Pardus 21'in dağıtım desteği
 sona ermiştir. Uygulama uyumluluğu işletim sistemine güvenlik desteği sağlamaz.
 
@@ -45,7 +45,7 @@ sürümün `.deb`, kaynak arşivi ve `SHA256SUMS` dosyalarını indir.
 
 ```sh
 sha256sum -c SHA256SUMS
-sudo apt install ./umumay_0.1.3_all.deb
+sudo apt install ./umumay_0.1.4_all.deb
 umumay
 ```
 
@@ -94,7 +94,7 @@ GNOME Shell, Wayland ve fiziksel donanım testi yerine geçmez.
 [uyumluluk kaynakları](docs/COMPATIBILITY.md) ayrıntıları açıklar.
 
 [Katkı](CONTRIBUTING.md) · [Güvenlik bildirimi](SECURITY.md) ·
-[Mimari](replica/architecture.md) · [Logo](docs/BRANDING.md) ·
+[Mimari](docs/ARCHITECTURE.md) · [Logo](docs/BRANDING.md) ·
 [Yayın süreci](docs/RELEASE.md) · [Adın hikâyesi](docs/NAME.md)
 
 Ad, Hüma kuşundan ilham alan özgün bir seçimdir. Tarihî bir sözcük varyantı

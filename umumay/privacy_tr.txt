@@ -1,5 +1,5 @@
 UMUMAY — GİZLİLİK VE YEREL VERİ İŞLEME HAKKINDA BİLGİLENDİRME
-Önizleme 0.1.3 — 31 Ekim 2026
+Önizleme 0.1.4 — 1 Kasım 2026
 
 Umumay bağımsız bir açık kaynak projedir; resmî Pardus veya
 TÜBİTAK/ULAKBİM ürünü değildir.

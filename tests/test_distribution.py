@@ -8,7 +8,7 @@ class DistributionTests(unittest.TestCase):
     def test_cli_version_does_not_require_gtk(self):
         result = subprocess.run([sys.executable, '-m', 'umumay', '--version'],
                                 capture_output=True, text=True, check=True)
-        self.assertEqual(result.stdout.strip(), '0.1.3')
+        self.assertEqual(result.stdout.strip(), '0.1.4')
 
     def test_both_notices_are_present_offline(self):
         root = Path(__file__).resolve().parents[1]

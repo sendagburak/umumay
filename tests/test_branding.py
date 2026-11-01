@@ -38,6 +38,12 @@ class BrandingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             source = Path(folder) / 'source'
             shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns('dist', '.git', '__pycache__'))
+            excluded = ['replica/SKILL.md', '.agents/SKILL.md', 'work/private.txt',
+                        '.env', 'umumay/.env', 'umumay/api_keys.txt']
+            for name in excluded:
+                path = source / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text('SYNTHETIC_ARTIFACT_MUST_NOT_SHIP')
             subprocess.run([sys.executable, 'tools/build_preview.py'], cwd=source,
                            check=True, capture_output=True, timeout=30)
             raw = next((source / 'dist').glob('*.deb')).read_bytes()
@@ -49,6 +55,8 @@ class BrandingTests(unittest.TestCase):
                 payloads[name] = raw[offset + 60:offset + 60 + size]
                 offset += 60 + size + size % 2
             with tarfile.open(fileobj=io.BytesIO(payloads['data.tar.gz'])) as archive:
+                self.assertFalse(any('/replica/' in name for name in archive.getnames()))
+                self.assertNotIn('usr/lib/python3/dist-packages/umumay/api_keys.txt', archive.getnames())
                 desktop = archive.extractfile('usr/share/applications/io.github.sendagburak.umumay.desktop').read().decode()
                 self.assertIn('StartupWMClass=io.github.sendagburak.umumay', desktop)
                 self.assertIn('Icon=umumay\n', desktop)
@@ -59,3 +67,10 @@ class BrandingTests(unittest.TestCase):
                     self.assertEqual(data[:8], b'\x89PNG\r\n\x1a\n')
                     self.assertEqual(int.from_bytes(data[16:20], 'big'), size)
                     self.assertEqual(int.from_bytes(data[20:24], 'big'), size)
+            with tarfile.open(next((source / 'dist').glob('*-source.tar.gz'))) as archive:
+                names = {m.name.split('/', 1)[1] for m in archive.getmembers() if m.isfile()}
+                for name in excluded:
+                    self.assertNotIn(name, names)
+                self.assertFalse(any(name.startswith(('replica/', 'work/', '.agents/')) for name in names))
+                self.assertIn('LICENSE', names)
+                self.assertIn('umumay/ui.py', names)
