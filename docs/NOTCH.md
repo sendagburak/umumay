@@ -1,6 +1,6 @@
 # Umumay X11 çentik prototipi (geliştirme dalı)
 
-**Durum:** Yayımlanmamış deneysel çalışma; 0.1.4 .deb içinde bulunmaz.
+**Durum:** `main` dalına birleştirilmiş deneysel kaynak kod; yayımlanan 0.1.4 .deb içinde bulunmaz.
 **Amaç:** Fare ile açılan, ekranın üst ortasında duran küçük bir çentik. Normal
 760×560 uygulama penceresi ürünün ana arayüzü değildir.
 

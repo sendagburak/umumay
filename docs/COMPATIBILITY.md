@@ -67,7 +67,7 @@ Paket Architecture: all'dur; ARM desteği test edilmiş değildir.
 
 ## Deneysel X11 çentik dalı (yayımlanmamış)
 
-`feature/x11-hover-notch` GTK3 üzerinde üst-orta X11 hover çentiğini hedefler.
+`main` dalına birleştirilmiş deneysel GTK3/X11 çentik kodu üst-orta hover davranışını hedefler.
 `XDG_SESSION_TYPE=wayland` için gerçek pencere konumlandırması sağlanmadığından
 uygulama hata gösterir; bunu GNOME/Wayland uyumu olarak nitelemeyin.
 Pardus 21/23/25 XFCE/X11 kombinasyonlarında gerçek panel, ekran ölçekleme,

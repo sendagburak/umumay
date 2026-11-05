@@ -49,7 +49,7 @@ masaüstünün ilgili desteği gerekir. Uygulama bunları kendiliğinden kurmaz.
 Pencere kapanınca uygulama ve uyanık tutma isteği kapanır.
 
 Yayımlanan **0.1.4** normal GTK penceresi açar, çentik içermez.
-**feature/x11-hover-notch geliştirme dalında** gerçek üst-orta X11 çentiği
+**main dalındaki geliştirme kaynak kodunda (henüz yayımlanmamış)** gerçek üst-orta X11 çentiği
 uygulama çalışırken görünür; fareyle büyür, üstündeki düğmeyle bildirim alanına
 gizlenebilir. Bildirim alanından tekrar açma ve tamamen çıkma seçenekleri vardır.
 İsteğe bağlı **Oturum açıldığında başlat** ayarı XDG autostart kullanır.

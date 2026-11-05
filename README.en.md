@@ -48,7 +48,7 @@ and desktop file icons. Umumay does not install or enable extensions.
 Closing the window exits the application and releases its idle inhibitor.
 
 The published **0.1.4** opens a normal GTK window; it does not contain a notch.
-The **feature/x11-hover-notch development branch** implements a top-centre X11
+The **main branch development source (not yet released as a .deb)** implements a top-centre X11
 handle that expands on hover, plus a close-to-tray action, explicit tray exit and
 opt-in XDG autostart. **These changes are not in the published .deb yet.**
 GNOME Wayland is not supported for notch positioning and does not silently fall
