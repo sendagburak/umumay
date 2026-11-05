@@ -10,7 +10,10 @@ Hesap, sunucu, web API'si, SDK veya API anahtarı gerektirmez.
 | links.py | Elle girilen bağlantı metnini açmadan ve DNS sorgusu yapmadan ayrıştırma |
 | awake.py / desktop.py | Süreli uyanık tutma ve yerel oturum D-Bus hizmetleri |
 | branding.py / tray.py | Paketlenmiş logo, açık seçilen kısayol ve yerel bildirim alanı |
-| ui.py | Tek GTK penceresi, araç ekranları ve yerel gizlilik metinleri |
+| ui.py | Çentik içeriğinde mevcut yerel araçlar, uygulama yaşam döngüsü ve modül tercihleri |
+| notch.py | XFCE/X11 üst-orta hover çentiği, konumlandırma ve görünüm durum makinesi |
+| autostart.py | Kullanıcı onayıyla XDG oturum açılışında başlatma, güvenli özel .desktop girdisi |
+| tray.py | Gerçek host varsa bildirim alanında aç/göster/çıkış; host yoksa görünmez arka plan reddi |
 
 D-Bus çağrıları bilgisayardaki GNOME/XFCE hizmetlerine gider; internet API'si değildir.
 Kullanıcı girdileri GTK'de düz metin olarak gösterilir. Paket sorgusu sabit

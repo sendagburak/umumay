@@ -85,6 +85,18 @@ class GuiTests(unittest.TestCase):
             app.stack.set_visible_child_name('awake')
             app._start_awake()
             self.assertFalse(app.awake.active, 'Isolated test bus should have no idle service')
+            # Explicit close-to-tray must not terminate the app when a host is available.
+            original_can_background = app.tray.can_background
+            app.tray.can_background = lambda: True
+            try:
+                app._hide_to_tray()
+                self.assertFalse(app.window.get_visible())
+                self.assertFalse(app.closed)
+                app._show_notch()
+                self.assertTrue(app.window.get_visible())
+                self.assertTrue(app.notch.state.expanded)
+            finally:
+                app.tray.can_background = original_can_background
             app.window.destroy()
             self.assertTrue(app.closed)
             self.assertIsNone(app.tray)

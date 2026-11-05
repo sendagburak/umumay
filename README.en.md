@@ -47,9 +47,14 @@ you to allow launching it. GNOME needs desktop support for AppIndicators
 and desktop file icons. Umumay does not install or enable extensions.
 Closing the window exits the application and releases its idle inhibitor.
 
-The current interface is a normal GTK window. A top-edge notch panel is
-a design concept, not an implemented feature. The interface is Turkish;
-the bundled privacy notice is available in Turkish and English.
+The published **0.1.4** opens a normal GTK window; it does not contain a notch.
+The **feature/x11-hover-notch development branch** implements a top-centre X11
+handle that expands on hover, plus a close-to-tray action, explicit tray exit and
+opt-in XDG autostart. **These changes are not in the published .deb yet.**
+GNOME Wayland is not supported for notch positioning and does not silently fall
+back to a conventional window. [Implementation and limitations](docs/NOTCH.md).
+The interface is Turkish; the bundled privacy notice is available in Turkish
+and English.
 
 ## Install
 
