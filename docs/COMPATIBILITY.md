@@ -64,3 +64,12 @@ Güncel 0.1.3 GitHub sonuçları üstte ayrı verilmiştir.
 Her VM'de ISO hash'i, imaj digest'i (varsa), Python/GTK ve D-Bus servis
 adları kayıt altına alınmalı; kullanıcı kimliği/hostname kaydedilmemeli.
 Paket Architecture: all'dur; ARM desteği test edilmiş değildir.
+
+## Deneysel X11 çentik dalı (yayımlanmamış)
+
+`feature/x11-hover-notch` GTK3 üzerinde üst-orta X11 hover çentiğini hedefler.
+`XDG_SESSION_TYPE=wayland` için gerçek pencere konumlandırması sağlanmadığından
+uygulama hata gösterir; bunu GNOME/Wayland uyumu olarak nitelemeyin.
+Pardus 21/23/25 XFCE/X11 kombinasyonlarında gerçek panel, ekran ölçekleme,
+çoklu monitör, bildirim alanı ve oturum açılışında başlatma testleri bekliyor.
+Konteyner ve Xvfb başarılı olsa bile gerçek masaüstü onayı sayılmaz.

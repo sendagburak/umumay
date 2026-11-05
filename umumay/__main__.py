@@ -7,6 +7,7 @@ from pathlib import Path
 from . import __version__
 from .core import collect_snapshot
 from .runtime import validate_local_session
+from .notch import require_x11_notch
 from .storage import write_report
 
 
@@ -21,6 +22,7 @@ def main():
             print('Yerel rapor kaydedildi.')
             return 0
         validate_local_session()
+        require_x11_notch(os.environ.get('DISPLAY', ''))
         # Keep GTK's file/settings integration local and avoid persistent chooser preferences.
         os.environ.update(GIO_USE_VFS='local', GSETTINGS_BACKEND='memory', GTK_USE_PORTAL='0')
         from .ui import UtilityApp

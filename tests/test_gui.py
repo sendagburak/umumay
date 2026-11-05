@@ -27,6 +27,8 @@ class GuiTests(unittest.TestCase):
             self.assertIsNotNone(app.window.get_icon())
             self.assertEqual(app.brand_image.get_pixbuf().get_width(), 48)
             self.assertEqual(len(app.tray.menu.get_children()), 2)
+            self.assertIsNotNone(app.lookup_action('hide'))
+            self.assertIsNone(app.lookup_action('quit'))
             self.assertTrue(app.tray.indicator is not None or app.tray.legacy is not None)
             def capture(name):
                 loop = GLib.MainLoop()
@@ -41,9 +43,28 @@ class GuiTests(unittest.TestCase):
                     area = '%d,%d,%d,%d' % (x, y, app.window.get_allocated_width(), app.window.get_allocated_height())
                     subprocess.run(['/usr/bin/scrot', '-z', '-a', area,
                                     str(destination / (name + '.png'))], check=True, timeout=10)
-            self.assertEqual(app.stack.get_visible_child_name(), 'privacy')
+            self.assertEqual(app.stack.get_visible_child_name(), 'system')
+            self.assertFalse(app.notch.state.expanded)
             self.assertIsNone(app.snapshot)
-            capture('01-privacy')
+            capture('01-notch-collapsed')
+            with patch.object(app.notch, '_is_inside', return_value=True):
+                app.notch._enter(None, None)
+                deadline = time.monotonic() + 2
+                while not app.notch.state.expanded and time.monotonic() < deadline:
+                    while Gtk.events_pending():
+                        Gtk.main_iteration_do(False)
+                    time.sleep(0.02)
+                self.assertTrue(app.notch.state.expanded, 'Hover did not expand notch')
+            capture('01b-notch-expanded')
+            with patch.object(app.notch, '_is_inside', return_value=False):
+                app.notch._leave(None, None)
+                deadline = time.monotonic() + 2
+                while app.notch.state.expanded and time.monotonic() < deadline:
+                    while Gtk.events_pending():
+                        Gtk.main_iteration_do(False)
+                    time.sleep(0.02)
+                self.assertFalse(app.notch.state.expanded, 'Leave did not collapse notch')
+            app.notch.expand()
             app._enter()
             self.assertIsNotNone(app.snapshot)
             time.sleep(0.05)
@@ -85,6 +106,18 @@ class GuiTests(unittest.TestCase):
             app.stack.set_visible_child_name('awake')
             app._start_awake()
             self.assertFalse(app.awake.active, 'Isolated test bus should have no idle service')
+            # Explicit close-to-tray must not terminate the app when a host is available.
+            original_can_background = app.tray.can_background
+            app.tray.can_background = lambda: True
+            try:
+                app._hide_to_tray()
+                self.assertFalse(app.window.get_visible())
+                self.assertFalse(app.closed)
+                app._show_notch()
+                self.assertTrue(app.window.get_visible())
+                self.assertTrue(app.notch.state.expanded)
+            finally:
+                app.tray.can_background = original_can_background
             app.window.destroy()
             self.assertTrue(app.closed)
             self.assertIsNone(app.tray)

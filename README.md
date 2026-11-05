@@ -48,8 +48,16 @@ GNOME'da bildirim alanı için AppIndicator, masaüstünde dosya simgeleri için
 masaüstünün ilgili desteği gerekir. Uygulama bunları kendiliğinden kurmaz.
 Pencere kapanınca uygulama ve uyanık tutma isteği kapanır.
 
-Mevcut arayüz normal bir GTK penceresidir. Üst çentikten açılan panel fikri
-henüz uygulanmadı. Arayüz Türkçedir; gizlilik metni Türkçe ve İngilizce sunulur.
+Yayımlanan **0.1.4** normal GTK penceresi açar, çentik içermez.
+**feature/x11-hover-notch geliştirme dalında** gerçek üst-orta X11 çentiği
+uygulama çalışırken görünür; fareyle büyür, üstündeki düğmeyle bildirim alanına
+gizlenebilir. Bildirim alanından tekrar açma ve tamamen çıkma seçenekleri vardır.
+İsteğe bağlı **Oturum açıldığında başlat** ayarı XDG autostart kullanır.
+**Bu özellikler henüz yayımlanan .deb paketinde yoktur.** GNOME Wayland
+çentik modu bu geliştirme dalında desteklenmez ve yanlış bir çentik vaadiyle
+normal pencereye geçilmez. [Teknik tasarım / sınırlar](docs/NOTCH.md).
+
+Arayüz Türkçedir; gizlilik metni Türkçe ve İngilizce sunulur.
 
 ## Kurulum
 

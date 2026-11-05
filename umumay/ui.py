@@ -10,10 +10,12 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GdkPixbuf, Gio, GLib, Gtk
 
 from .awake import AwakeController
+from .autostart import AutostartError, is_autostart_enabled, set_autostart
 from .branding import APP_ID, ICON_FILE, create_shortcut
 from .core import collect_snapshot, installed_packages
 from .desktop import IdleBackend
 from .links import clean_url
+from .notch import NotchShell
 from .storage import MODULES, SettingsStore, StorageError, write_report
 from .tray import StatusArea
 
@@ -40,7 +42,7 @@ class UtilityApp(Gtk.Application):
     def __init__(self):
         GLib.set_prgname(APP_ID)
         GLib.set_application_name('Umumay')
-        super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.NON_UNIQUE)
+        super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.FLAGS_NONE)
         self.store = SettingsStore()
         self.disabled, self.settings_error = set(), ''
         try:
@@ -48,30 +50,34 @@ class UtilityApp(Gtk.Application):
         except StorageError as error:
             self.settings_error = str(error)
         self.awake = AwakeController(IdleBackend())
-        self.started = False
+        self.started = True
         self.closed = False
         self.generation = 0
         self.package_loading = False
         self.last_cpu = None
         self.snapshot = None
         self.window = None
+        self.notch = None
         self.tray = None
+        self._hide_notice_sent = False
 
     def do_activate(self):
         if self.window is not None:
-            self.window.present()
+            self._show_notch()
             return
         Gtk.Settings.get_default().set_property('gtk-recent-files-enabled', False)
         self.window = Gtk.ApplicationWindow(application=self, title='Umumay · Önizleme')
         self.window.set_wmclass('umumay', APP_ID)
         Gtk.Window.set_default_icon_from_file(str(ICON_FILE))
         self.window.set_icon_from_file(str(ICON_FILE))
-        self.window.set_default_size(760, 560)
         self.window.connect('destroy', self._close)
-        action = Gio.SimpleAction.new('quit', None)
-        action.connect('activate', lambda *_: self.window.destroy())
+        self.window.connect('delete-event', self._hide_to_tray)
+        # Closing is always the same safe action as the panel's close button.
+        # A true quit is reserved for the notification-area menu.
+        action = Gio.SimpleAction.new('hide', None)
+        action.connect('activate', self._hide_to_tray)
         self.add_action(action)
-        self.set_accels_for_action('app.quit', ['<Primary>q'])
+        self.set_accels_for_action('app.hide', ['<Primary>q'])
         root = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         root.set_border_width(12)
         self.stack = Gtk.Stack()
@@ -84,10 +90,14 @@ class UtilityApp(Gtk.Application):
             str(ICON_FILE), 48, 48, True))
         self.brand_image.get_accessible().set_name('Umumay logosu')
         heading.pack_start(self.brand_image, False, False, 0)
-        heading.pack_start(label('Umumay · Yerel masaüstü araçları'), False, False, 0)
+        heading.pack_start(label('Umumay · Yerel masaüstü araçları'), True, True, 0)
+        close_button = Gtk.Button(label='×  Kapat')
+        close_button.set_tooltip_text('Bildirim alanına gizle; oradaki menüden tamamen çıkabilirsiniz')
+        close_button.connect('clicked', self._hide_to_tray)
+        heading.pack_end(close_button, False, False, 0)
         content.pack_start(heading, False, False, 0)
         content.pack_start(root, True, True, 0)
-        self.window.add(content)
+        self.notch = NotchShell(self.window, content, ICON_FILE)
         self._privacy_page()
         self._system_page()
         self._packages_page()
@@ -97,9 +107,50 @@ class UtilityApp(Gtk.Application):
         self.stack.connect('notify::visible-child-name', self._page_changed)
         self.window.show_all()
         self._apply_disabled()
-        self.stack.set_visible_child_name('privacy')
-        self.tray = StatusArea(self.window)
+        self.stack.set_visible_child_name('system')
+        self.notch.after_show()
+        self.tray = StatusArea(self.window, on_show=self._show_notch, on_quit=self._really_quit)
         GLib.timeout_add_seconds(2, self._tick)
+
+    def _show_notch(self, *_):
+        if self.window is None or self.closed:
+            return
+        self.window.show()
+        self.notch.expand(pin=True)
+        self.window.present()
+        self._tick()
+
+    def _hide_to_tray(self, *_):
+        if self.closed or self.window is None:
+            return False
+        if self.tray is None or not self.tray.can_background():
+            warning = Gtk.MessageDialog(
+                transient_for=self.window, modal=True,
+                message_type=Gtk.MessageType.WARNING,
+                buttons=Gtk.ButtonsType.OK,
+                text='Bildirim alanı bulunamadı')
+            warning.format_secondary_text(
+                'Umumay görünmeden arka planda kalmayacak. XFCE bildirim alanını '
+                'etkinleştirin veya Umumay’ı açık bırakın.')
+            warning.run()
+            warning.destroy()
+            return True
+        self.notch.state.escape()
+        self.notch._apply_view()
+        self.window.hide()
+        if not self._hide_notice_sent:
+            notification = Gio.Notification.new('Umumay arka planda çalışıyor')
+            notification.set_body(
+                'Bildirim alanındaki Umumay simgesinden çentiği yeniden açın '
+                'veya “Tamamen çık” seçeneğini kullanın.')
+            self.send_notification('umumay-background', notification)
+            self._hide_notice_sent = True
+        return True
+
+    def _really_quit(self, *_):
+        if self.window is not None and not self.closed:
+            self.window.destroy()
+        self.quit()
 
     def _page(self, name, title):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -208,6 +259,16 @@ class UtilityApp(Gtk.Application):
         self.settings_status = label(self.settings_error or 'Tercihler yalnız bu bilgisayara kaydedilir.')
         box.pack_start(self.settings_status, False, False, 0)
         button(box, 'Masaüstü kısayolu oluştur…', self._desktop_shortcut)
+        self.autostart_toggle = Gtk.CheckButton(
+            label='Oturum açıldığında Umumay çentiğini otomatik başlat')
+        self.autostart_toggle.set_active(is_autostart_enabled())
+        self.autostart_toggle.connect('toggled', self._toggle_autostart)
+        box.pack_start(self.autostart_toggle, False, False, 0)
+        box.pack_start(label(
+            'İsteğe bağlıdır. Oturum açıldığında çentik kapalı hâlde üst ortada görünür; '
+            'üzerine geldiğinizde genişler. “Kapat” çentiği bildirim alanına gizler, '
+            'bildirim alanındaki “Tamamen çık” uygulamayı sonlandırır.'
+        ), False, False, 0)
         self.switches = {}
         for module in MODULES:
             toggle = Gtk.CheckButton(label=module.title + ' — ' + module.description)
@@ -215,6 +276,19 @@ class UtilityApp(Gtk.Application):
             toggle.connect('toggled', self._toggle, module.id)
             self.switches[module.id] = toggle
             box.pack_start(toggle, False, False, 0)
+
+    def _toggle_autostart(self, toggle):
+        try:
+            enabled = set_autostart(toggle.get_active())
+        except AutostartError as error:
+            self.settings_status.set_text(str(error))
+            toggle.handler_block_by_func(self._toggle_autostart)
+            toggle.set_active(is_autostart_enabled())
+            toggle.handler_unblock_by_func(self._toggle_autostart)
+        else:
+            self.settings_status.set_text(
+                'Oturum açıldığında başlatma etkin.' if enabled
+                else 'Oturum açıldığında başlatma devre dışı.')
 
     def _desktop_shortcut(self, *_):
         if shutil.which('umumay') is None:
@@ -366,7 +440,12 @@ class UtilityApp(Gtk.Application):
             dialog.destroy()
 
     def _close(self, *_):
+        if self.closed:
+            return
         self.closed = True
+        if self.notch is not None:
+            self.notch.close()
+            self.notch = None
         self.generation += 1
         if self.tray is not None:
             self.tray.close()
