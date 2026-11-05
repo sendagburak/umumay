@@ -3,6 +3,12 @@
 Kaynak deposu: https://github.com/sendagburak/umumay
 
 İlk yayın 0.1.3'tür. 0.1.4, geliştirme notlarını dağıtımdan çıkaran düzeltmedir.
+Kullanıcılar branch dizinlerinden paket aramamalıdır. Kurulumun resmî dağıtım
+noktası GitHub **Releases → Assets → .deb** dosyasıdır. README'nin en üst
+bölümünde mevcut önizlemenin sürümüne sabit doğrudan .deb bağlantısı
+sunulur. Yayınlanan sürüm değiştiğinde TR/EN README bağlantıları birlikte
+güncellenir. Notch tamamlanmadan `/releases/latest` bağlantısına
+güvenilmez; GitHub prerelease sürümlerini latest olarak işaretlemez.
 GitHub sürümü **pre-release**
 olarak işaretlenir. Türkçe README, İngilizce README.en.md, GPL tam metni,
 iki dilde gizlilik bildirimi, logo ve paketleme kaynakta birlikte tutulur.

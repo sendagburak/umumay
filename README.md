@@ -4,6 +4,19 @@
 
 **Bilgisayarında çalışır. Bilgilerini yanında tutar.**
 
+## ⬇️ Pardus / Debian için indir
+
+**[⬇ Umumay 0.1.4 (.deb) doğrudan indir](https://github.com/sendagburak/umumay/releases/download/v0.1.4/umumay_0.1.4_all.deb)** · **[📦 GitHub Releases ve diğer dosyalar](https://github.com/sendagburak/umumay/releases/tag/v0.1.4)**
+
+1. Yukarıdaki **.deb doğrudan indir** bağlantısına tıkla. Branch veya kaynak kod klasörüne girmen gerekmez.
+2. İndirdiğin dosyanın bulunduğu klasörde bir terminal aç ve `sudo apt install ./umumay_0.1.4_all.deb` komutunu çalıştır.
+3. Uygulama menüsünden **Umumay**'ı aç.
+
+> **Dikkat:** Bu bir **geliştirme önizlemesidir**. Temel ürün hedefi olan üst-orta **çentik (notch)** henüz uygulanmadı. Bu sürüm geleneksel bir GTK penceresi açar. Çentik uygulaması olarak tanıtılmamalıdır. [Çentik geliştirme görevi](https://github.com/sendagburak/umumay/issues/2).
+>
+> Paket **imzasızdır**. [SHA256SUMS](https://github.com/sendagburak/umumay/releases/tag/v0.1.4) bütünlük kontrolü içindir, yayıncı imzası değildir. Pardus 21 işletim sistemi güvenlik desteği dışındadır.
+
+
 Pardus ve Debian için küçük, modüler masaüstü araçları. Sistem kaynaklarını gör,
 kurulu paketlerde ara, ekranını süreli uyanık tut ve bağlantılardaki takip
 parametrelerini temizle. Hesap açmana, e-posta vermene veya bir sunucuya

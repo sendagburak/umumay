@@ -4,6 +4,19 @@
 
 **Runs on your computer. Keeps your information with you.**
 
+## ⬇️ Download for Pardus / Debian
+
+**[⬇ Download Umumay 0.1.4 (.deb) directly](https://github.com/sendagburak/umumay/releases/download/v0.1.4/umumay_0.1.4_all.deb)** · **[📦 GitHub Releases and other files](https://github.com/sendagburak/umumay/releases/tag/v0.1.4)**
+
+1. Click the **direct .deb download** above. No need to navigate source branches or folders.
+2. Open a terminal in the downloaded file's directory and run `sudo apt install ./umumay_0.1.4_all.deb`.
+3. Launch **Umumay** from the applications menu.
+
+> **Development preview, not a stable release.** The central purpose, a top-center **hover notch**, is **not yet implemented**. This version opens a conventional GTK window. Do not market this build as a working notch. [Track the notch blocker](https://github.com/sendagburak/umumay/issues/2).
+>
+> The package is **unsigned**. [SHA256SUMS](https://github.com/sendagburak/umumay/releases/tag/v0.1.4) checks integrity, not publisher identity. Pardus 21 is out of OS security support.
+
+
 Small, modular desktop tools for Pardus and Debian. Check system resources,
 search installed packages, keep your screen awake for a limited time and
 remove tracking parameters from links. No account, email address or server
