@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 @unittest.skipUnless(os.environ.get('RUN_GTK_TESTS') == '1', 'Linux GTK/Xvfb required')
 class GuiTests(unittest.TestCase):
-    def test_first_run_privacy_local_tools_and_module_switch(self):
+    def test_home_local_tools_privacy_and_module_switch(self):
         import gi
         gi.require_version('Gtk', '3.0')
         from gi.repository import GLib, Gtk
@@ -41,11 +41,17 @@ class GuiTests(unittest.TestCase):
                     area = '%d,%d,%d,%d' % (x, y, app.window.get_allocated_width(), app.window.get_allocated_height())
                     subprocess.run(['/usr/bin/scrot', '-z', '-a', area,
                                     str(destination / (name + '.png'))], check=True, timeout=10)
-            self.assertEqual(app.stack.get_visible_child_name(), 'privacy')
+            self.assertEqual(app.stack.get_visible_child_name(), 'home')
             self.assertIsNone(app.snapshot)
-            capture('01-privacy')
-            app._enter()
+            self.assertTrue(app.shortcuts['system'].get_sensitive())
+            app._tick()
             self.assertIsNotNone(app.snapshot)
+            capture('01-home')
+            app.stack.set_visible_child_name('privacy')
+            self.assertEqual(app.stack.get_visible_child_name(), 'privacy')
+            app._enter()
+            self.assertEqual(app.stack.get_visible_child_name(), 'home')
+            app.stack.set_visible_child_name('system')
             time.sleep(0.05)
             app._tick()
             self.assertIsNotNone(app.snapshot.cpu_percent)
@@ -66,9 +72,12 @@ class GuiTests(unittest.TestCase):
             app.url_input.set_text('https://example.test/?utm_source=test&a=1')
             app._clean_link()
             self.assertEqual(app.url_output.get_text(), 'https://example.test/?a=1')
+            app._copy_clean_link()
+            self.assertIn('panoya', app.url_status.get_text())
             capture('04-link-cleaner')
             app.switches['links'].set_active(False)
             self.assertFalse(app.stack.get_child_by_name('links').get_visible())
+            self.assertFalse(app.shortcuts['links'].get_sensitive())
             self.assertEqual(app.url_input.get_text(), '')
             self.assertEqual(SettingsStore().load(), {'links'})
             # A failed preference write must restore the switch, not crash GTK.

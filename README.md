@@ -35,8 +35,11 @@ GNOME'da bildirim alanı için AppIndicator, masaüstünde dosya simgeleri için
 masaüstünün ilgili desteği gerekir. Uygulama bunları kendiliğinden kurmaz.
 Pencere kapanınca uygulama ve uyanık tutma isteği kapanır.
 
-Mevcut arayüz normal bir GTK penceresidir. Üst çentikten açılan panel fikri
-henüz uygulanmadı. Arayüz Türkçedir; gizlilik metni Türkçe ve İngilizce sunulur.
+Kaynak kodun geliştirme sürümünde ana sayfa araçlara hızlı erişim sağlar;
+gizlilik ekranı isteğe bağlı açılır ve bağlantı sonucu tek tıkla panoya
+kopyalanabilir. Üst çentikten açılan panel fikri henüz uygulanmadı.
+Arayüz Türkçedir; gizlilik metni Türkçe ve İngilizce sunulur.
+Bu değişiklikler yayımlanmış 0.1.4 paketinde bulunmaz.
 
 ## Kurulum
 

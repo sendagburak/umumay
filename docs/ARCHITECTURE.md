@@ -10,7 +10,7 @@ Hesap, sunucu, web API'si, SDK veya API anahtarı gerektirmez.
 | links.py | Elle girilen bağlantı metnini açmadan ve DNS sorgusu yapmadan ayrıştırma |
 | awake.py / desktop.py | Süreli uyanık tutma ve yerel oturum D-Bus hizmetleri |
 | branding.py / tray.py | Paketlenmiş logo, açık seçilen kısayol ve yerel bildirim alanı |
-| ui.py | Tek GTK penceresi, araç ekranları ve yerel gizlilik metinleri |
+| ui.py | Tek GTK penceresi, hızlı araçlar ana sayfası, araç ekranları, isteğe bağlı gizlilik metinleri ve gecikmeli paket araması |
 
 D-Bus çağrıları bilgisayardaki GNOME/XFCE hizmetlerine gider; internet API'si değildir.
 Kullanıcı girdileri GTK'de düz metin olarak gösterilir. Paket sorgusu sabit

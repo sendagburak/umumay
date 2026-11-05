@@ -34,9 +34,11 @@ you to allow launching it. GNOME needs desktop support for AppIndicators
 and desktop file icons. Umumay does not install or enable extensions.
 Closing the window exits the application and releases its idle inhibitor.
 
-The current interface is a normal GTK window. A top-edge notch panel is
-a design concept, not an implemented feature. The interface is Turkish;
-the bundled privacy notice is available in Turkish and English.
+The development source adds a home screen with direct tool shortcuts,
+optional access to the privacy notice and a manual copy action for cleaned
+links. The top-edge notch panel is still a design concept, not yet implemented.
+The interface is Turkish; the bundled privacy notice is available in Turkish
+and English. These changes are not included in the published 0.1.4 package.
 
 ## Install
 

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import GdkPixbuf, Gio, GLib, Gtk
+from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 
 from .awake import AwakeController
 from .branding import APP_ID, ICON_FILE, create_shortcut
@@ -48,10 +48,11 @@ class UtilityApp(Gtk.Application):
         except StorageError as error:
             self.settings_error = str(error)
         self.awake = AwakeController(IdleBackend())
-        self.started = False
+        self.started = True
         self.closed = False
         self.generation = 0
         self.package_loading = False
+        self._filter_source_id = None
         self.last_cpu = None
         self.snapshot = None
         self.window = None
@@ -88,6 +89,7 @@ class UtilityApp(Gtk.Application):
         content.pack_start(heading, False, False, 0)
         content.pack_start(root, True, True, 0)
         self.window.add(content)
+        self._home_page()
         self._privacy_page()
         self._system_page()
         self._packages_page()
@@ -97,7 +99,7 @@ class UtilityApp(Gtk.Application):
         self.stack.connect('notify::visible-child-name', self._page_changed)
         self.window.show_all()
         self._apply_disabled()
-        self.stack.set_visible_child_name('privacy')
+        self.stack.set_visible_child_name('home')
         self.tray = StatusArea(self.window)
         GLib.timeout_add_seconds(2, self._tick)
 
@@ -108,6 +110,42 @@ class UtilityApp(Gtk.Application):
         scroll.add(box)
         self.stack.add_titled(scroll, name, title)
         return box
+
+    def _home_page(self):
+        box = self._page('home', 'Ana sayfa')
+        box.set_border_width(12)
+        heading = label('Umumay')
+        heading.set_markup('<span size="x-large" weight="bold">Umumay</span>')
+        box.pack_start(heading, False, False, 0)
+        box.pack_start(label('Sık kullandığınız yerel araçlara doğrudan ulaşın. İnternet veya hesap gerekmez.'),
+                       False, False, 0)
+        self.home_status = label('Yerel sistem bilgileri yükleniyor…')
+        self.home_status.get_accessible().set_name('Sistem özeti')
+        box.pack_start(self.home_status, False, False, 0)
+        grid = Gtk.Grid(column_spacing=10, row_spacing=10)
+        self.shortcuts = {}
+        for index, module in enumerate(MODULES):
+            action = Gtk.Button()
+            action.set_size_request(188, 88)
+            content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            content.set_border_width(8)
+            title = label(module.title)
+            title.set_markup('<b>%s</b>' % module.title)
+            description = label(module.description)
+            content.pack_start(title, False, False, 0)
+            content.pack_start(description, True, True, 0)
+            action.add(content)
+            action.connect('clicked', self._show_module, module.id)
+            action.get_accessible().set_name('%s aracını aç' % module.title)
+            grid.attach(action, index % 2, index // 2, 1, 1)
+            self.shortcuts[module.id] = action
+        box.pack_start(grid, False, False, 0)
+        button(box, 'Gizlilik bilgilerini görüntüle / Privacy',
+               lambda *_: self.stack.set_visible_child_name('privacy'))
+
+    def _show_module(self, _action, module_id):
+        if module_id not in self.disabled:
+            self.stack.set_visible_child_name(module_id)
 
     def _privacy_page(self):
         box = self._page('privacy', 'Gizlilik / Privacy')
@@ -128,12 +166,11 @@ class UtilityApp(Gtk.Application):
             view.get_buffer().set_text(text)
         language.connect('changed', show_notice)
         show_notice(language)
-        button(box, 'Araçları aç / Open tools', self._enter)
+        button(box, 'Ana sayfaya dön / Home', self._enter)
 
     def _enter(self, *_):
         self.started = True
-        first = next((m.id for m in MODULES if m.id not in self.disabled), 'settings')
-        self.stack.set_visible_child_name(first)
+        self.stack.set_visible_child_name('home')
         self._tick()
 
     def _system_page(self):
@@ -160,14 +197,28 @@ class UtilityApp(Gtk.Application):
         box.pack_start(self.package_status, False, False, 0)
         self.package_list = Gtk.ListStore(str, str)
         filtered = self.package_list.filter_new()
-        filtered.set_visible_func(lambda model, row, _: self.search.get_text().casefold() in
+        self.package_query = ''
+        self.package_filter = filtered
+        filtered.set_visible_func(lambda model, row, _: self.package_query in
                                   (model[row][0] + ' ' + model[row][1]).casefold(), None)
-        self.search.connect('search-changed', lambda *_: filtered.refilter())
+        self.search.connect('search-changed', self._schedule_package_filter)
         tree = Gtk.TreeView(model=filtered)
         for index, title in enumerate(['Paket', 'Sürüm']):
             tree.append_column(Gtk.TreeViewColumn(title, Gtk.CellRendererText(), text=index))
         box.pack_start(tree, True, True, 0)
         button(box, 'Listeyi yenile', lambda *_: self._load_packages())
+
+    def _schedule_package_filter(self, *_):
+        # Avoid re-filtering thousands of packages on every keystroke.
+        if self._filter_source_id is not None:
+            GLib.source_remove(self._filter_source_id)
+        self._filter_source_id = GLib.timeout_add(180, self._apply_package_filter)
+
+    def _apply_package_filter(self):
+        self._filter_source_id = None
+        self.package_query = self.search.get_text().casefold()
+        self.package_filter.refilter()
+        return False
 
     def _awake_page(self):
         box = self._page('awake', 'Uyanık tut')
@@ -194,6 +245,7 @@ class UtilityApp(Gtk.Application):
         box.pack_start(self.url_output, False, False, 0)
         self.url_status = label()
         box.pack_start(self.url_status, False, False, 0)
+        button(box, 'Sonucu panoya kopyala', self._copy_clean_link)
 
     def _clean_link(self, *_):
         try:
@@ -202,6 +254,15 @@ class UtilityApp(Gtk.Application):
         except ValueError as error:
             self.url_output.set_text('')
             self.url_status.set_text(str(error))
+
+    def _copy_clean_link(self, *_):
+        # Explicit copy only; Umumay never monitors the clipboard.
+        value = self.url_output.get_text()
+        if not value:
+            self.url_status.set_text('Önce geçerli bir bağlantıyı temizleyin.')
+            return
+        Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD).set_text(value, -1)
+        self.url_status.set_text('Temizlenmiş bağlantı panoya kopyalandı.')
 
     def _settings_page(self):
         box = self._page('settings', 'Modüller')
@@ -265,7 +326,9 @@ class UtilityApp(Gtk.Application):
 
     def _apply_disabled(self):
         for module in MODULES:
-            self.stack.get_child_by_name(module.id).set_visible(module.id not in self.disabled)
+            enabled = module.id not in self.disabled
+            self.stack.get_child_by_name(module.id).set_visible(enabled)
+            self.shortcuts[module.id].set_sensitive(enabled)
 
     def _page_changed(self, *_):
         name = self.stack.get_visible_child_name()
@@ -321,7 +384,7 @@ class UtilityApp(Gtk.Application):
     def _tick(self):
         if self.closed:
             return False
-        if self.started and self.stack.get_visible_child_name() == 'system' and 'system' not in self.disabled:
+        if self.started and self.stack.get_visible_child_name() in {'system', 'home'} and 'system' not in self.disabled:
             self.snapshot = collect_snapshot(self.last_cpu)
             self.last_cpu = self.snapshot.cpu
             s = self.snapshot
@@ -337,6 +400,11 @@ class UtilityApp(Gtk.Application):
             for name, (percent, text) in values.items():
                 self.bars[name].set_fraction(max(0, min(1, (percent or 0) / 100)))
                 self.bars[name].set_text(text)
+            cpu_text = '%.1f%%' % s.cpu_percent if s.cpu_percent is not None else 'ölçülüyor'
+            self.home_status.set_text('%s · %s / %s\nCPU: %s  ·  RAM: %s  ·  Disk: %s' %
+                                      (family, s.desktop, s.session, cpu_text,
+                                       size_text(s.memory.used if s.memory else None),
+                                       size_text(s.disk_used)))
         if self.awake.active:
             try:
                 self.awake.tick()
@@ -367,6 +435,9 @@ class UtilityApp(Gtk.Application):
 
     def _close(self, *_):
         self.closed = True
+        if self._filter_source_id is not None:
+            GLib.source_remove(self._filter_source_id)
+            self._filter_source_id = None
         self.generation += 1
         if self.tray is not None:
             self.tray.close()
