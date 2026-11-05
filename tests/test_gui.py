@@ -27,6 +27,8 @@ class GuiTests(unittest.TestCase):
             self.assertIsNotNone(app.window.get_icon())
             self.assertEqual(app.brand_image.get_pixbuf().get_width(), 48)
             self.assertEqual(len(app.tray.menu.get_children()), 2)
+            self.assertIsNotNone(app.lookup_action('hide'))
+            self.assertIsNone(app.lookup_action('quit'))
             self.assertTrue(app.tray.indicator is not None or app.tray.legacy is not None)
             def capture(name):
                 loop = GLib.MainLoop()
@@ -45,9 +47,24 @@ class GuiTests(unittest.TestCase):
             self.assertFalse(app.notch.state.expanded)
             self.assertIsNone(app.snapshot)
             capture('01-notch-collapsed')
-            app.notch.expand()
-            self.assertTrue(app.notch.state.expanded)
+            with patch.object(app.notch, '_is_inside', return_value=True):
+                app.notch._enter(None, None)
+                deadline = time.monotonic() + 2
+                while not app.notch.state.expanded and time.monotonic() < deadline:
+                    while Gtk.events_pending():
+                        Gtk.main_iteration_do(False)
+                    time.sleep(0.02)
+                self.assertTrue(app.notch.state.expanded, 'Hover did not expand notch')
             capture('01b-notch-expanded')
+            with patch.object(app.notch, '_is_inside', return_value=False):
+                app.notch._leave(None, None)
+                deadline = time.monotonic() + 2
+                while app.notch.state.expanded and time.monotonic() < deadline:
+                    while Gtk.events_pending():
+                        Gtk.main_iteration_do(False)
+                    time.sleep(0.02)
+                self.assertFalse(app.notch.state.expanded, 'Leave did not collapse notch')
+            app.notch.expand()
             app._enter()
             self.assertIsNotNone(app.snapshot)
             time.sleep(0.05)

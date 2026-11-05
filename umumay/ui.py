@@ -72,10 +72,12 @@ class UtilityApp(Gtk.Application):
         self.window.set_icon_from_file(str(ICON_FILE))
         self.window.connect('destroy', self._close)
         self.window.connect('delete-event', self._hide_to_tray)
-        action = Gio.SimpleAction.new('quit', None)
-        action.connect('activate', lambda *_: self.window.destroy())
+        # Closing is always the same safe action as the panel's close button.
+        # A true quit is reserved for the notification-area menu.
+        action = Gio.SimpleAction.new('hide', None)
+        action.connect('activate', self._hide_to_tray)
         self.add_action(action)
-        self.set_accels_for_action('app.quit', ['<Primary>q'])
+        self.set_accels_for_action('app.hide', ['<Primary>q'])
         root = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         root.set_border_width(12)
         self.stack = Gtk.Stack()
