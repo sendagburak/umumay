@@ -10,16 +10,19 @@ PANEL_WIDTH = 640
 PANEL_HEIGHT = 480
 HOVER_DELAY_MS = 95
 CLOSE_GRACE_MS = 430
+GNOME_TOP_BAR_HEIGHT = 32
 
 
 def require_x11_notch(display_name, environ=None):
-    """Require an actual local X11 session; Wayland window placement is unsupported."""
+    """Require an actual local X11 or XWayland session; native Wayland placement is unsupported."""
     env = os.environ if environ is None else environ
-    if env.get('XDG_SESSION_TYPE', '').lower() == 'wayland' or env.get('GDK_BACKEND', '').lower() == 'wayland':
-        raise RuntimeError('Umumay çentik modu henüz Wayland oturumunu desteklemiyor. '
-                           'XFCE/X11 oturumu kullanın; sıradan pencere çentik diye açılmaz.')
+    # Native Wayland backend is not supported for absolute top-centre notch positioning,
+    # but Wayland sessions running XWayland (GDK_BACKEND=x11) are supported.
+    if env.get('GDK_BACKEND', '').lower() == 'wayland':
+        raise RuntimeError('Umumay çentik modu yerel Wayland protokolü yerine XWayland gerektirir. '
+                           'GDK_BACKEND=x11 kullanarak başlatın.')
     if not display_name or not re.fullmatch(r'(?:(?:unix/?)?:)?\d+(?:\.\d+)?', display_name):
-        raise RuntimeError('Umumay çentik modu yerel X11 ekranı gerektiriyor (örn. :0).')
+        raise RuntimeError('Umumay çentik modu yerel X11/XWayland ekranı gerektiriyor (örn. :0).')
 
 
 class NotchState:
@@ -144,15 +147,23 @@ class NotchShell:
         monitor = display.get_primary_monitor() or display.get_monitor(0)
         return monitor.get_geometry()
 
+    def _top_offset(self):
+        desktops = os.environ.get('XDG_CURRENT_DESKTOP', '').lower().split(':')
+        if any(d in desktops for d in ('gnome', 'ubuntu:gnome')):
+            return GNOME_TOP_BAR_HEIGHT
+        return 0
+
     def _target_geometry(self):
         monitor = self._monitor_geometry()
+        y_offset = self._top_offset()
         if self.state.expanded:
             width = min(PANEL_WIDTH, max(COLLAPSED_WIDTH, monitor.width - 24))
-            height = min(PANEL_HEIGHT, max(170, monitor.height - 48))
+            height = min(PANEL_HEIGHT, max(170, monitor.height - y_offset - 48))
         else:
             width, height = COLLAPSED_WIDTH, COLLAPSED_HEIGHT
         x = monitor.x + (monitor.width - width) // 2
-        return x, monitor.y, width, height
+        y = monitor.y + y_offset
+        return x, y, width, height
 
     def _schedule_position(self):
         if self._position_source is not None:

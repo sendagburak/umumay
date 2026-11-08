@@ -21,9 +21,23 @@ class NotchStateTests(unittest.TestCase):
         self.assertFalse(notch.expanded)
 
     def test_unsupported_wayland_never_falls_back_to_fake_notch(self):
+        # Native wayland GDK backend is rejected
         with self.assertRaises(RuntimeError):
-            require_x11_notch(':0', {'XDG_SESSION_TYPE': 'wayland'})
+            require_x11_notch(':0', {'GDK_BACKEND': 'wayland'})
+        # Missing display is rejected
         with self.assertRaises(RuntimeError):
             require_x11_notch('', {'XDG_SESSION_TYPE': 'x11'})
+        # Valid X11 and XWayland with display is accepted
+        require_x11_notch(':0', {'XDG_SESSION_TYPE': 'wayland'})
         require_x11_notch(':99', {'XDG_SESSION_TYPE': 'x11'})
         require_x11_notch('unix/:0', {'XDG_SESSION_TYPE': 'x11'})
+
+    def test_gnome_top_offset(self):
+        import os
+        from unittest.mock import patch
+        from umumay.notch import NotchShell, GNOME_TOP_BAR_HEIGHT
+
+        with patch.dict(os.environ, {'XDG_CURRENT_DESKTOP': 'GNOME'}):
+            self.assertEqual(NotchShell._top_offset(None), GNOME_TOP_BAR_HEIGHT)
+        with patch.dict(os.environ, {'XDG_CURRENT_DESKTOP': 'XFCE'}):
+            self.assertEqual(NotchShell._top_offset(None), 0)
