@@ -20,9 +20,9 @@
   oluşturulur; devre dışı bırakılınca yalnız Umumay'ın kendi girdisi silinir.
 
 ## Platform sınırları
-- XFCE/X11 ilk hedef. X11 `Gtk.Window.move` ve keep-above ile kontrol.
-- GNOME/Wayland, XWayland yoluyla normal pencere gibi açılmasın diye açıkça
-  reddedilir. Wayland için uygun masaüstü entegrasyonu ayrıca geliştirilmelidir.
+- XFCE/X11 ve GNOME/Wayland (XWayland üzerinden) desteklenir.
+- GNOME Wayland oturumunda `GDK_BACKEND=x11` üzerinden XWayland çentik modu kullanılır.
+  GNOME masaüstünde üst panel dikkate alınarak çentik üst barın hemen altına hizalanır.
 - X11'de üst panel/çoklu monitör/ekran ölçekleme ve tray host durumu farklı
   sistemlerde değişebilir. Etkili son kullanıcı desteği, tam ISO üzerinde test
   edilmeden ilan edilmeyecek.

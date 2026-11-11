@@ -22,6 +22,10 @@ def main():
             print('Yerel rapor kaydedildi.')
             return 0
         validate_local_session()
+        # When running in a Wayland session, ensure GTK uses XWayland (GDK_BACKEND=x11)
+        # so the X11 notch positioning, override-redirect/utility hints and keep-above work.
+        if os.environ.get('XDG_SESSION_TYPE', '').lower() == 'wayland' and not os.environ.get('GDK_BACKEND'):
+            os.environ['GDK_BACKEND'] = 'x11'
         require_x11_notch(os.environ.get('DISPLAY', ''))
         # Keep GTK's file/settings integration local and avoid persistent chooser preferences.
         os.environ.update(GIO_USE_VFS='local', GSETTINGS_BACKEND='memory', GTK_USE_PORTAL='0')

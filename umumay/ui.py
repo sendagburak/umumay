@@ -124,16 +124,9 @@ class UtilityApp(Gtk.Application):
         if self.closed or self.window is None:
             return False
         if self.tray is None or not self.tray.can_background():
-            warning = Gtk.MessageDialog(
-                transient_for=self.window, modal=True,
-                message_type=Gtk.MessageType.WARNING,
-                buttons=Gtk.ButtonsType.OK,
-                text='Bildirim alanı bulunamadı')
-            warning.format_secondary_text(
-                'Umumay görünmeden arka planda kalmayacak. XFCE bildirim alanını '
-                'etkinleştirin veya Umumay’ı açık bırakın.')
-            warning.run()
-            warning.destroy()
+            # If no notification area / status tray is available (e.g. default GNOME),
+            # closing the notch quits the application instead of keeping it trapped or open.
+            self._really_quit()
             return True
         self.notch.state.escape()
         self.notch._apply_view()
